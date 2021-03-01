@@ -65,5 +65,21 @@ class PDODemoTest extends \Codeception\Test\Unit
         $pdoDemo = new PDODemo();
         $res = $pdoDemo->runComplexQuery('Volkswagen', 'Audi');
 
+        $this->tester->assertIsArray($res);
+        $this->tester->assertCount(2, $res);
+
+        if ($res[0]['dealer_id'] = 'Bdf') {
+            $bdfRec = $res[0];
+            $elvRec = $res[1];
+        } else {
+            $bdfRec = $res[1];
+            $elvRec = $res[0];
+        }
+
+        $this->tester->assertEquals('Bdf', $bdfRec['dealer_id']);
+        $this->tester->assertEquals(2, $bdfRec['count']);
+        $this->tester->assertEquals('Elv', $elvRec['dealer_id']);
+        $this->tester->assertEquals(1, $elvRec['count']);
+
     }
 }

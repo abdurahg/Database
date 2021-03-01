@@ -145,6 +145,17 @@ class PDODemo
    {
        $res = array();
 
+       $query = 'SELECT dealer_id, COUNT(*) AS count FROM car AS v WHERE make = :largerBrand GROUP BY dealer_id'
+              . ' HAVING count > (SELECT COUNT(*) FROM car AS a WHERE make = :smallerBrand AND v.dealer_id = a.dealer_id)';
+
+       $stmt = $this->db->prepare($query);
+       $stmt->bindValue(':largerBrand', $largerBrand);
+       $stmt->bindValue(':smallerBrand', $smallerBrand);
+       $stmt->execute();
+
+       while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+           $res[] = $row;
+       }
        return $res;
    }
 }
